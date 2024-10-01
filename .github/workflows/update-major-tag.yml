@@ -1,0 +1,24 @@
+name: Update Major Version Tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Extract major version and update tag
+        run: |
+          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "Latest tag is $TAG"
+          
+          MAJOR_VERSION=$(echo $TAG | sed -E 's/(v[0-9]+).*/\1/')
+          echo "Major version is $MAJOR_VERSION"
+          
+          git tag -f $MAJOR_VERSION $TAG
+          git push origin $MAJOR_VERSION --force
