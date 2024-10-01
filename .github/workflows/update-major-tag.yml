@@ -22,7 +22,7 @@ jobs:
 
       - name: Extract major version and update tag
         run: |
-          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          TAG=${GITHUB_REF#refs/tags/}
           echo "Latest tag is $TAG"
           MAJOR_VERSION=${TAG%%.*}
           echo "Major version is $MAJOR_VERSION"
